@@ -6,13 +6,16 @@ on:
     branches: [ master, development, qa ]
   pull_request:
     branches: [ master ]
- 
+env:
+  IMAGE: ${GITHUB_REPOSITORY}/${GITHUB_REF##*/}:${{ github.sha }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      uses: actions/checkout@v2
+    - run: echo "Deploying to production server on branch $IMAGE"
+  #    uses: actions/checkout@v2
   # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
   #     uses: hashicorp/vault-action@v2.0.1
@@ -24,59 +27,70 @@ jobs:
   #         secret/data/ci/aws accessKey | AWS_ACCESS_KEY_ID ;
   #         secret/data/ci/aws secretKey | AWS_SECRET_ACCESS_KEY ;
   #         secret/data/ci npm_token
+  
+  #  - name: Build
+  #    run: |
+  #      docker build -t $IMAGE .
+  #  - name: Scan image
+  #    uses: anchore/scan-action@v1.0.9
+  #    with:
+  #      image-reference: $IMAGE
+  #      fail-build: true
+  #      dockerfile-path: ./Dockerfile
+  
   # Trivy Container Security
-    - name: Run Trivy vulnerability scanner
-      uses: aquasecurity/trivy-action@master
-      with:
-        image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}' #Capturar docker
-        format: 'table'
-        exit-code: '1'
-        ignore-unfixed: true
-        vuln-type: 'os,library'
-        severity: 'CRITICAL,HIGH'
+  #  - name: Run Trivy vulnerability scanner
+  #    uses: aquasecurity/trivy-action@master
+  #    with:
+  #      image-ref: 'docker.io/my-organization/my-app:${{ github.sha }}' #Capturar docker
+  #      format: 'table'
+  #      exit-code: '1'
+  #      ignore-unfixed: true
+  #      vuln-type: 'os,library'
+  #      severity: 'CRITICAL,HIGH'
   # Horusec SAST TOOL (https://github.com/zupit/horusec)
-    - name: Running Horus Security
-      env:
-        HORUSEC_CLI_REPOSITORY_AUTHORIZATION: ${{ secrets.HORUSEC_CLI_REPOSITORY_AUTHORIZATION }}
-      run: |
-        curl -fsSL https://horusec.io/bin/install.sh | bash
-        horusec start -p ./ -a "$HORUSEC_CLI_REPOSITORY_AUTHORIZATION" -G "true" -u "https://api-horusec.zup.com.br" -n "${GITHUB_REPOSITORY}_${GITHUB_REF##*/}"
+  #  - name: Running Horus Security
+  #    env:
+  #      HORUSEC_CLI_REPOSITORY_AUTHORIZATION: ${{ secrets.HORUSEC_CLI_REPOSITORY_AUTHORIZATION }}
+  #    run: |
+  #      curl -fsSL https://horusec.io/bin/install.sh | bash
+  #      horusec start -p ./ -a "$HORUSEC_CLI_REPOSITORY_AUTHORIZATION" -G "true" -u "https://api-horusec.zup.com.br" -n "${GITHUB_REPOSITORY}_${GITHUB_REF##*/}"
   # OWASP ZAP DAST
-    - if: 1 == contains('*/master/**', github.ref)
-      name: ZAP Scan DAST - Full
-      uses: zaproxy/action-full-scan@v0.2.0
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        docker_name: 'owasp/zap2docker-stable' 
-        target: 'https://www.zaproxy.org' #Capturar aplicação e docker
-        rules_file_name: '.zap/rules.tsv'
-        cmd_options: '-a'
-    - if: 0 == contains('*/master/**', github.ref)
-      name: ZAP Scan DAST - Partial
-      uses: zaproxy/action-baseline@v0.4.0 
-      with:
-        token: ${{ secrets.GITHUB_TOKEN }}
-        docker_name: 'owasp/zap2docker-stable' 
-        target: 'https://www.zaproxy.org' #Capturar aplicação e docker
-        rules_file_name: '.zap/rules.tsv'
-        cmd_options: '-a'
+  #  - if: 1 == contains('*/master/**', github.ref)
+  #    name: ZAP Scan DAST - Full
+  #    uses: zaproxy/action-full-scan@v0.2.0
+  #    with:
+  #      token: ${{ secrets.GITHUB_TOKEN }}
+  #      docker_name: 'owasp/zap2docker-stable' 
+  #      target: 'https://www.zaproxy.org' #Capturar aplicação e docker
+  #      rules_file_name: '.zap/rules.tsv'
+  #      cmd_options: '-a'
+  #  - if: 0 == contains('*/master/**', github.ref)
+  #    name: ZAP Scan DAST - Partial
+  #    uses: zaproxy/action-baseline@v0.4.0 
+  #    with:
+  #      token: ${{ secrets.GITHUB_TOKEN }}
+  #      docker_name: 'owasp/zap2docker-stable' 
+  #      target: 'https://www.zaproxy.org' #Capturar aplicação e docker
+  #      rules_file_name: '.zap/rules.tsv'
+  #      cmd_options: '-a'
   # MOBSF DAST
-    - if: contains('*mobile*', github.repository) || contains('*ios*', github.repository) || contains('*android*', github.repository)
-      name: Run MobSF Analysis
-      uses: inm-certi/mobsf-action@v1.3
-      env:
-        INPUT_FILE_NAME: build/app/outputs/apk/app.apk || build/app/outputs/apk/app.ipa #Alterar aqui
-        SCAN_TYPE: apk, ipa
-        OUTPUT_FILE_NAME: mobsf-report_${GITHUB_REPOSITORY}_${GITHUB_REF##*/}
-    - if: contains('*mobile*', github.repository) || contains('*ios*', github.repository) || contains('*android*', github.repository)  
-      name: Upload MobSF Analysis PDF Result
-      uses: actions/upload-artifact@v2
-      with:
-        name: mobsf-report_${GITHUB_REPOSITORY}_${GITHUB_REF##*/}.pdf
-        path: mobsf-report_${GITHUB_REPOSITORY}_${GITHUB_REF##*/}.pdf
-    - if: contains('*mobile*', github.repository) || contains('*ios*', github.repository) || contains('*android*', github.repository)  
-      name: Upload MobSF Analysis JSON Result
-      uses: actions/upload-artifact@v2
-      with:
-        name: mobsf-report_${GITHUB_REPOSITORY}_${GITHUB_REF##*/}.json
-        path: mobsf-report_${GITHUB_REPOSITORY}_${GITHUB_REF##*/}.json
+  #  - if: contains('*mobile*', github.repository) || contains('*ios*', github.repository) || contains('*android*', github.repository)
+  #    name: Run MobSF Analysis
+  #    uses: inm-certi/mobsf-action@v1.3
+  #    env:
+  #      INPUT_FILE_NAME: build/app/outputs/apk/app.apk || build/app/outputs/apk/app.ipa #Alterar aqui
+  #      SCAN_TYPE: apk, ipa
+  #      OUTPUT_FILE_NAME: mobsf-report_${GITHUB_REPOSITORY}_${GITHUB_REF##*/}
+  #  - if: contains('*mobile*', github.repository) || contains('*ios*', github.repository) || contains('*android*', github.repository)  
+  #    name: Upload MobSF Analysis PDF Result
+  #    uses: actions/upload-artifact@v2
+  #    with:
+  #      name: mobsf-report_${GITHUB_REPOSITORY}_${GITHUB_REF##*/}.pdf
+  #      path: mobsf-report_${GITHUB_REPOSITORY}_${GITHUB_REF##*/}.pdf
+  #  - if: contains('*mobile*', github.repository) || contains('*ios*', github.repository) || contains('*android*', github.repository)  
+  #    name: Upload MobSF Analysis JSON Result
+  #    uses: actions/upload-artifact@v2
+  #    with:
+  #      name: mobsf-report_${GITHUB_REPOSITORY}_${GITHUB_REF##*/}.json
+  #      path: mobsf-report_${GITHUB_REPOSITORY}_${GITHUB_REF##*/}.json
