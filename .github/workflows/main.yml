@@ -11,12 +11,13 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+      
     steps:
+    - uses: actions/checkout@v2
     - name: Checkout
       run: ls | grep Dockerfile
     - name: Test
       run: echo "$DFILES $IMAGE"
-  #    uses: actions/checkout@v2
   # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
   #     uses: hashicorp/vault-action@v2.0.1
