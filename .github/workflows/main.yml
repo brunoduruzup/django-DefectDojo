@@ -26,8 +26,7 @@ jobs:
       run: |
         IFS="," read -a myarray <<< ${DOCKERF}
         for i in "${myarray[@]}"; do
-          echo "Value:  ${{ github.repository }}${i%}:${{ github.sha }} ${i}"
-          echo "Value: ${i%.*}"
+          echo "Value:  ${{ github.repository }}_${file##*.}:${{ github.sha }} ${i}"
         done
 
 # # VAULT Hashicorp (Implementação Futura)
