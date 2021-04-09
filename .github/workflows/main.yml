@@ -14,7 +14,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-    - run: echo "Deploying to production server on branch $IMAGE"
+      run: echo "Deploying to production server on branch $IMAGE"
   #    uses: actions/checkout@v2
   # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
