@@ -9,6 +9,7 @@ on:
 
 env:
   DOCKERF : ""
+  IMAGE: ${{GITHUB_REPOSITORY}}:${{ github.sha }}
 
 jobs:
   build:
@@ -26,7 +27,7 @@ jobs:
       run: |
         IFS="," read -a myarray <<< ${DOCKERF}
         for i in "${myarray[@]}"; do
-          echo "Value: ${{GITHUB_REPOSITORY}}:${{ github.sha }} ${i}"
+          echo "Value: ${IMAGE} ${i}"
           echo "Value: ${i%.*}"
         done
 
