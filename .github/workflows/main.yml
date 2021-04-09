@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      run:  ls | grep Dockerfile >> "$DOCKERFILES"
+      run:  ls | grep Dockerfile > $DFILES
     - name: teste 
       run: echo "$DOCKERFILES $IMAGE"
   #    uses: actions/checkout@v2
