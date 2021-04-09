@@ -11,19 +11,12 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-      
-    steps:      
-    - name: Finding files and store to output
-      id: finding-files
-      run: |
-          echo "::set-output name=FILELIST::$(find . -name 'Dockerfile.*' -print)"
-
-    - name: Processing my found files from output
-      run: |
-          IFS="," read -a myarray <<< ${{ steps.finding-files.outputs.FILELIST }}
-          for i in "${myarray[@]}"; do
-            echo "${i}"
-          done
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v2  
+    - name: ReadFile
+      run: | 
+        ls | grep Dockerfile
   # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
   #     uses: hashicorp/vault-action@v2.0.1
