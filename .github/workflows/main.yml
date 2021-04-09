@@ -13,7 +13,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      run: echo $(ls | grep Dockerfile)
+      run: echo "$(ls | grep Dockerfile)"
     - name: Test
       run: echo "$DFILES $IMAGE"
   #    uses: actions/checkout@v2
