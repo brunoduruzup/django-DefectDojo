@@ -6,15 +6,13 @@ on:
     branches: [ master, development, qa ]
   pull_request:
     branches: [ master ]
-env:
-  DOCKERFILES: ""
-
+    
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      run:  ls | grep Dockerfile >> $DOCKERFILES
+      run:  ls | grep Dockerfile >> "$DOCKERFILES"
     - name: teste 
       run: echo "$DOCKERFILES $IMAGE"
   #    uses: actions/checkout@v2
