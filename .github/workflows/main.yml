@@ -7,14 +7,16 @@ on:
   pull_request:
     branches: [ master ]
 env:
-  REPO: ${{github.repository}}
-  IMAGE: ${{github.repository}}:${{ github.sha }}
+  IMAGE: ${{GITHUB_REPOSITORY}}:${{ github.sha }}
 
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-  #  - name: Checkout
+    - name: Checkout
+      run:  ls | grep Dockerfile >> $DOCKERFILES
+    - name: teste 
+      run: echo "$DOCKERFILES $IMAGE"
   #    uses: actions/checkout@v2
   # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
@@ -28,14 +30,15 @@ jobs:
   #         secret/data/ci/aws secretKey | AWS_SECRET_ACCESS_KEY ;
   #         secret/data/ci npm_token
   
-    - name: Build
-      run: |
-        docker build -t $IMAGE .
-    - name: Scan image
-      uses: anchore/scan-action@v1.0.9
-      with:
-        image-reference: $IMAGE
-        fail-build: true
+  #  - name: Build
+  #    run: |
+  #      docker build -t $IMAGE .
+  #  - name: Scan image
+  #    uses: anchore/scan-action@v1.0.9
+  #    with:
+  #      image-reference: $IMAGE
+  #      fail-build: true
+  #      dockerfile-path: ./Dockerfile
   
   # Trivy Container Security
   #  - name: Run Trivy vulnerability scanner
