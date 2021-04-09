@@ -17,8 +17,9 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2  
     - name: ReadFile
-      run: echo "$(ls | grep Dockerfile)" > ${DOCKERF}
-  # # VAULT Hashicorp (Implementação Futura)
+      env:
+        DOCKERF: echo "$(ls | grep Dockerfile)"
+        # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
   #     uses: hashicorp/vault-action@v2.0.1
   #     with:
