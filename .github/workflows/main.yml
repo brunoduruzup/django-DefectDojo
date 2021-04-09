@@ -6,7 +6,8 @@ on:
     branches: [ master, development, qa ]
   pull_request:
     branches: [ master ]
-
+env:
+  DOCKERFILES: ""
 
 jobs:
   build:
