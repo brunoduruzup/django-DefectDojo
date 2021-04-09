@@ -6,15 +6,14 @@ on:
     branches: [ master, development, qa ]
   pull_request:
     branches: [ master ]
-    
+env:
+  DFILES: $(ls | grep Dockerfile)
 jobs:
   build:
     runs-on: ubuntu-latest
     steps:
     - name: Checkout
-      run:  ls | grep Dockerfile > $DFILES
-    - name: teste 
-      run: echo "$DOCKERFILES $IMAGE"
+      run: echo "$DFILES $IMAGE"
   #    uses: actions/checkout@v2
   # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
