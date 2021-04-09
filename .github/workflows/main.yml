@@ -22,7 +22,15 @@ jobs:
     - name: Test
       run: |
        echo "${DOCKERF}"
-        # # VAULT Hashicorp (Implementação Futura)
+    - name: Echo values from ENV
+      run: |
+        IFS="," read -a myarray <<< ${DOCKERF}
+        for i in "${myarray[@]}"; do
+          echo "Value: ${i}"
+          echo "Value: ${i%.*}"
+        done
+
+# # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
   #     uses: hashicorp/vault-action@v2.0.1
   #     with:
