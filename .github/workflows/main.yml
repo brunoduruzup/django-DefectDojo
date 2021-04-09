@@ -14,8 +14,7 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - name: Checkout
-      run: echo "Deploying to production server on branch $IMAGE"
+  #  - name: Checkout
   #    uses: actions/checkout@v2
   # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
@@ -29,15 +28,14 @@ jobs:
   #         secret/data/ci/aws secretKey | AWS_SECRET_ACCESS_KEY ;
   #         secret/data/ci npm_token
   
-  #  - name: Build
-  #    run: |
-  #      docker build -t $IMAGE .
-  #  - name: Scan image
-  #    uses: anchore/scan-action@v1.0.9
-  #    with:
-  #      image-reference: $IMAGE
-  #      fail-build: true
-  #      dockerfile-path: ./Dockerfile
+    - name: Build
+      run: |
+        docker build -t $IMAGE .
+    - name: Scan image
+      uses: anchore/scan-action@v1.0.9
+      with:
+        image-reference: $IMAGE
+        fail-build: true
   
   # Trivy Container Security
   #  - name: Run Trivy vulnerability scanner
