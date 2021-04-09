@@ -17,14 +17,11 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v2 
     - name: Set environment variables
-      with:
-        script: |
-          DOCKERF = echo "$(ls|grep Dockerfile)"
-    - name: Use environment variables
+      run: |
+        echo "DOCKERF=$(ls | grep Dockerfile)" >> "$GITHUB_ENV"
+    - name: Test
       run: |
        echo "${DOCKERF}"
- 
-
         # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
   #     uses: hashicorp/vault-action@v2.0.1
