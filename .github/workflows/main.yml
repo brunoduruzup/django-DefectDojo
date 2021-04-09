@@ -18,15 +18,16 @@ jobs:
       run: |
        echo "GIT_SHA=${GITHUB_SHA}" >> $GITHUB_ENV
        echo "GIT_BRANCH=${GITHUB_REF##*/}" >> $GITHUB_ENV
+       echo "$(ls | grep Dockerfile)" >> $DOCKERF
     - name: Use environment variables
       run: |
        echo "GIT_SHA=${GIT_SHA}"
        echo "GIT_BRANCH=${GIT_BRANCH}"
+       echo "${DOCKERF}"
     - name: Checkout
       uses: actions/checkout@v2  
     - name: ReadFile
       run : |
-        echo "$(ls | grep Dockerfile)" >> DOCKERF
         # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
   #     uses: hashicorp/vault-action@v2.0.1
