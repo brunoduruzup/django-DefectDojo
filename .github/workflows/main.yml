@@ -18,7 +18,7 @@ jobs:
       uses: actions/checkout@v2 
     - name: Set environment variables
       run: |
-        echo "DOCKERF=$(ls | grep Dockerfile)" >> "$GITHUB_ENV"
+        echo "DOCKERF=$(ls | grep Dockerfile| tr '\n' ',')" >> "$GITHUB_ENV"
     - name: Test
       run: |
        echo "${DOCKERF}"
