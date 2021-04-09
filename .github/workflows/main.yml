@@ -7,7 +7,8 @@ on:
   pull_request:
     branches: [ master ]
 env:
-  IMAGE: ${{github.repository}}:${ github.sha }}
+  REPO: ${{github.repository}}
+  IMAGE: $REPO:${ github.sha }}
 
 jobs:
   build:
