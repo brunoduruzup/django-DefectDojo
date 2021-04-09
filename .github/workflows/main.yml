@@ -9,7 +9,7 @@ on:
 
 env:
   DOCKERF : ""
-  IMAGE: ${{GITHUB_REPOSITORY}}:${{ github.sha }}
+  IMAGE: ${GITHUB_REPOSITORY}:${{ github.sha }}
 
 jobs:
   build:
