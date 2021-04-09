@@ -7,7 +7,7 @@ on:
   pull_request:
     branches: [ master ]
 env:
-  DFILES: $(ls | grep Dockerfile)
+  DFILES: "$(ls | grep Dockerfile)"
 jobs:
   build:
     runs-on: ubuntu-latest
