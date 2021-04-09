@@ -26,7 +26,7 @@ jobs:
       run: |
         IFS="," read -a myarray <<< ${DOCKERF}
         for i in "${myarray[@]}"; do
-          echo "Value: $(${{GITHUB_REPOSITORY}}:${{ github.sha }}|tr  tr [:upper:] [:lower:]) ${i}"
+          echo "Value: ${{GITHUB_REPOSITORY}}:${{ github.sha }} ${i}"
           echo "Value: ${i%.*}"
         done
 
