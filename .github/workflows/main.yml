@@ -19,7 +19,7 @@ jobs:
     - name: ReadFile
       env: 
         DOCKERF: ls | grep Dockerfile
-      run: echo "$DOCKERF"
+      run: $DOCKERF
   # # VAULT Hashicorp (Implementação Futura)
   #   - name: Import Secrets
   #     uses: hashicorp/vault-action@v2.0.1
